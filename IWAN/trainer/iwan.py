@@ -76,7 +76,6 @@ class IWAN(BaseTrainer):
         feature_source = self.base_net(inputs_src)    # base_net: CNN + GRU
         feature_target = self.base_net(inputs_tar)
 
-
         d0_output_source = self.d0_net(feature_source)   # d0_net:Discriminator
         d0_output_target = self.d0_net(feature_target)
         w = nn.Sigmoid()(d0_output_source).detach()

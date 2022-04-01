@@ -71,25 +71,15 @@ class DDS(object):
             # 利用np.random.permutaion函数，获得打乱后的行数，输出permutation
             x_data = x_data[permutation]
             label = label[permutation]
-                
+           
+        x_data = torch.tensor(x_data).to(torch.float32)       
+        x_data = torch.unsqueeze(x_data, dim=1)
+        
+        label = torch.tensor(label).to(torch.long)
         # 划分训练集和测试集
         x_train, x_test, y_train, y_test = train_test_split(x_data, label, test_size=self.test_size)
         
         # 转化成DataLoader
-        x_train = torch.tensor(x_train)
-        x_train = x_train.to(torch.float32)
-        x_train = torch.unsqueeze(x_train, dim=1)    # 添加一个维度，通道数 
-        
-        x_test = torch.tensor(x_test)
-        x_test = x_test.to(torch.float32)
-        x_test = torch.unsqueeze(x_test, dim=1)      # 添加一个维度，通道数 
-        
-        y_train = torch.tensor(y_train)
-        y_train = y_train.to(torch.long)
-        
-        y_test = torch.tensor(y_test)
-        y_test = y_test.to(torch.long)
-
         combined_train = []
         for x, y in zip(x_train, y_train):
             combined_train.append((x, y))

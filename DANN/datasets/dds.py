@@ -1,5 +1,4 @@
 import os
-from numpy import source
 import torch
 from torch.utils.data import DataLoader
 
@@ -27,7 +26,6 @@ class DDS(object):
             y_train_path = os.path.join(self.base_dir, self.source, 'y_train.pt')
             y_test_path = os.path.join(self.base_dir, self.source, 'y_test.pt')
         else:
-<<<<<<< HEAD
             x_train_path = os.path.join(self.base_dir, self.target, 'x_train.pt')
             x_test_path = os.path.join(self.base_dir, self.target, 'x_test.pt')
             y_train_path = os.path.join(self.base_dir, self.target, 'y_train.pt')
@@ -37,37 +35,6 @@ class DDS(object):
         x_test = torch.load(x_test_path)
         y_train = torch.load(y_train_path)
         y_test = torch.load(y_test_path)
-=======
-            file_list = list(map(lambda x:os.path.join(self.base_dir, 
-                                        x, self.target+'.npy'), file_list))  # 所有.npy的绝对路径
-
-        x_data = None
-        label = None
-        for index, item in enumerate(file_list):
-            temp_data = np.load(item)   # 加载数据
-            if label is not None:
-                label = np.append(label, np.ones(temp_data.shape[0])*index)
-            else:
-                label = np.ones(temp_data.shape[0])*index
-                
-            if x_data is not None:
-                x_data = np.append(x_data, temp_data, axis=0)
-            else:
-                x_data = temp_data
-        # 打乱数据
-        if self.shuffle:
-            permutation = np.random.permutation(x_data.shape[0])
-            # 利用np.random.permutaion函数，获得打乱后的行数，输出permutation
-            x_data = x_data[permutation]
-            label = label[permutation]
-           
-        x_data = torch.tensor(x_data).to(torch.float32)       
-        x_data = torch.unsqueeze(x_data, dim=1)
-        
-        label = torch.tensor(label).to(torch.long)
-        # 划分训练集和测试集
-        x_train, x_test, y_train, y_test = train_test_split(x_data, label, test_size=self.test_size)
->>>>>>> d8c7acd5ff08caba0c2506de9b082671bcd6f928
         
         # 转化成DataLoader
         combined_train = []

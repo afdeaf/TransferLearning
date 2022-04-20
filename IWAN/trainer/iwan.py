@@ -76,7 +76,6 @@ class IWAN(BaseTrainer):
         feature_source = self.base_net(inputs_src)    # base_net: CNN + GRU
         feature_target = self.base_net(inputs_tar)
 
-
         d0_output_source = self.d0_net(feature_source)   # d0_net:Discriminator
         d0_output_target = self.d0_net(feature_target)
         w = nn.Sigmoid()(d0_output_source).detach()
@@ -103,10 +102,7 @@ class IWAN(BaseTrainer):
 
         # feature sift, d0
         d0_features_all = torch.cat((d0_output_source, d0_output_target), dim=0)
-        loss_sift = d_align_uda(
-            d0_features_all, d0_features_all, self.d0_net,
-            coeff=get_coeff(self.iter, max_iter=self.cfg.TRAIN.TTL_ITE), ent=self.cfg.METHOD.ENT
-        ) 
+        loss_sift = sift(d0_features_all)
 
         # domain alignment
         features_all = torch.cat((w_feature_source, feature_target), dim=0)

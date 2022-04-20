@@ -27,8 +27,8 @@ def d_align_uda(softmax_output: Tensor, features: Tensor = None, d_net=None,
     loss_func = WeightBCE()
 
     d_input = softmax_output if features is None else features
-    # d_output = d_net(d_input, coeff=coeff)
-    d_output = torch.sigmoid(d_input)
+    d_output = d_net(d_input, coeff=coeff)
+    d_output = torch.sigmoid(d_output)
 
     batch_size = softmax_output.size(0) // 2
     labels = torch.tensor([[1]] * batch_size + [[0]] * batch_size).long().cuda()  # 2N x 1

@@ -9,7 +9,7 @@ __all__ = ['get_default_and_update_cfg']
 _C = CN()
 _C.SEED = 77
 _C.WORKERS = 1
-_C.TRAINER = 'DANN'
+_C.TRAINER = 'MMDTrainer'
 _C.SHUTDOWN = False
 
 # ========== training ==========
@@ -48,13 +48,13 @@ _C.DATASET.NUM_CLASSES = 9
 _C.DATASET.NAME = 'DDS'
 _C.DATASET.SOURCE = '20R_0HP'
 _C.DATASET.TARGET = '20R_8HP'
-_C.DATASET.ROOT = r'E:\Raven\jupyter\Transfer Learning\Dataset\dds划分_full'  
+_C.DATASET.ROOT = r'E:\Raven\Datasets\DDS划分(无噪声,9类)'  
 _C.DATASET.SHUFFLE = True
 _C.DATASET.TEST_SIZE = 0.2
 
 # ========== method ==========
 _C.METHOD = CN()
-_C.METHOD.W_ALG = 1.0
+_C.METHOD.W_ALG = 0.1
 _C.METHOD.ENT = False
 
 # HDA

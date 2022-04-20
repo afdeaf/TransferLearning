@@ -18,10 +18,6 @@ class BaseModel(nn.Module):
         '''
         Build classification head
         '''
-        # self.fc = nn.Sequential(
-        #     nn.Flatten(),
-        #     nn.Linear(self.fdim, self.num_classes)
-        # )
         self.fc = nn.Linear(self.fdim, self.num_classes)
         nn.init.kaiming_normal_(self.fc.weight)
         nn.init.zeros_(self.fc.bias)

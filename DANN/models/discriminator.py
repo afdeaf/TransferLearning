@@ -16,7 +16,7 @@ class Discriminator(nn.Module):
         self.relu2 = nn.ReLU()
         self.drop1 = nn.Dropout(0.5)
         self.drop2 = nn.Dropout(0.5)
-        self._init_params()
+        # self._init_params()
 
     def _init_params(self):
         for layer in self.modules():
@@ -33,7 +33,7 @@ class Discriminator(nn.Module):
                     nn.init.zeros_(layer.bias)
 
     def get_parameters(self):
-        return [{'params': self.parameters()}]
+        return [{'params': self.parameters(), 'lr_mult':1}]
 
     def forward(self, x, coeff: float):
         x.register_hook(grl_hook(coeff))  # GRL

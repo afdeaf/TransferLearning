@@ -11,7 +11,7 @@ from models.discriminator import *
 
 from utils.utils import get_coeff
 from utils.torch_utils import entropy_func
-from utils.loss import d_align_uda
+from utils.loss import d_align_uda, ContrastiveLoss
 
 __all__ =  ['DANN']
 
@@ -31,6 +31,7 @@ class DANN(BaseTrainer):
             hidden_size=self.cfg.MODEL.D_HIDDEN_SIZE,
             out_feature=self.cfg.MODEL.D_OUT_DIM
         ).cuda()
+        self.contra = ContrastiveLoss(batch_size=32)
 
         self.registed_models = {'base_net': self.base_net, 'd_net': self.d_net}
         self.model_parameters()
@@ -38,8 +39,8 @@ class DANN(BaseTrainer):
         self.build_optim(parameter_list)
 
     def one_step(self, data_src, data_tar):
-        inputs_src, labels_src = data_src['image'].cuda(), data_src['label'].cuda()
-        inputs_tar, labels_tar = data_tar['image'].cuda(), data_tar['label'].cuda()
+        inputs_src, labels_src = data_src[0].cuda(), data_src[1].cuda()
+        inputs_tar, labels_tar = data_tar[0].cuda(), data_tar[1].cuda()
 
         outputs_all_src = self.base_net(inputs_src)
         outputs_all_tar = self.base_net(inputs_tar)
@@ -57,20 +58,23 @@ class DANN(BaseTrainer):
         # domain alignment
         loss_alg = d_align_uda(
             softmax_all, features_all, self.d_net,
-            coeff=get_coeff(self.ite, max_iter=self.cfg.TRAIN.TTL_ITE), ent=self.cfg.METHOD.ENT
+            coeff=get_coeff(self.iter, max_iter=self.cfg.TRAIN.TTL_ITE), ent=self.cfg.METHOD.ENT
         )
+        # loss_alg = self.contra(outputs_all_src[0], outputs_all_tar[0])
+        # print(loss_alg)
 
         loss_ttl = loss_cls_src + loss_alg * self.cfg.METHOD.W_ALG
+        # loss_ttl = loss_cls_src 
 
         # update
         self.step(loss_ttl)
 
         # display
-        if self.ite % self.cfg.TRAIN.PRINT_FREQ == 0:
+        if self.iter % self.cfg.TRAIN.PRINT_FREQ == 0:
             self.display([
                 f'l_cls_src: {loss_cls_src.item():.3f}',
                 f'l_cls_tar: {loss_cls_tar.item():.3f}',
-                f'l_alg: {loss_alg.item():.3f}',
+                # f'l_alg: {loss_alg.item():.3f}',
                 f'l_ttl: {loss_ttl.item():.3f}',
                 f'ent_tar: {ent_tar.item():.3f}',
                 f'best_acc: {self.best_acc:.3f}',

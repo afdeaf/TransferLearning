@@ -1,5 +1,4 @@
 import os
-from numpy import source
 import torch
 from torch.utils.data import DataLoader
 
@@ -54,6 +53,6 @@ class DDS(object):
         data_test = DataLoader(combined_test, 
                                batch_size=self.batch_size, 
                                shuffle=self.shuffle,
-                               drop_last=False)
+                               drop_last=True)
 
         return data_train, data_test

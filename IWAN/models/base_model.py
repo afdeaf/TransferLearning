@@ -16,10 +16,14 @@ class BaseModel(nn.Module):
         '''
         Build classification head
         '''
-        self.fc =  nn.Linear(self.fdim, self.num_classes)
+        # self.fc = nn.Linear(self.fdim, 1000)
+        # self.fc.add_module(module=nn.Linear(1000, 1000))
+        # self.fc.add_module(module=nn.Linear(1000, self.num_classes))
+        self.fc = nn.Linear(self.fdim, self.num_classes)
         nn.init.kaiming_normal_(self.fc.weight)
         nn.init.zeros_(self.fc.bias)
 
+        # self._init_head()
 
     @property
     def fdim(self) -> int:
@@ -31,18 +35,20 @@ class BaseModel(nn.Module):
 
     def get_parameters(self):
         parameter_list = self.get_backbone_parameters()
-        # parameter_list.append({'lr_mult':10})
+        # parameter_list.append({'params': self.fc.parameters(), 'lr_mult':10})
         return parameter_list
-    
 
     @abstractmethod
     def forward_backbone(self, x):
         return x
 
-    def forward(self, x):
+    def forward(self, x) -> tuple:
+        '''
+        return: tuple like (feature, y_pred)
+        '''
         feature = self.forward_backbone(x)
+        # y = self.fc(feature)
         return feature
-    
 
     def _init_head(self):
         for layer in self.fc.modules():

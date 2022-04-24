@@ -17,6 +17,8 @@ class WeightBCE(nn.Module):
         :param weight: [N, 1]
         """
         label = label.float()
+
+        # 逻辑回归的损失函数：-y·log(z + epsilon) - (1-y)·log(1-z + epsilon)。epsilon是防止log(0)发生
         cross_entropy = - label * torch.log(x + self.epsilon) - (1 - label) * torch.log(1 - x + self.epsilon)
         
         return torch.sum(cross_entropy * weight.float()) / 2.
@@ -55,12 +57,12 @@ def d_align_uda(softmax_output: Tensor, features: Tensor = None, d_net=None,
 
     return loss_alg
 
-def sift(features: Tensor = None):
+def sift(features: Tensor = None, labels: Tensor = None):
     loss_func = WeightBCE()
     d_output = torch.sigmoid(features)
     batch_size = features.size(0) // 2
     labels = torch.tensor([[1]] * batch_size + [[0]] * batch_size).long().cuda()  # 2N x 1
+
     weight = torch.ones_like(labels).float() / batch_size
     loss_sift = loss_func.forward(d_output, labels, weight.view(-1, 1))
     return loss_sift
-

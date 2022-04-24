@@ -8,7 +8,6 @@ _C = CN()
 _C.SEED = 77
 _C.WORKERS = 1
 _C.TRAINER = 'IWAN'
-# _C.SHUTDOWN = True
 _C.SHUTDOWN = False
 
 # ========== training ==========
@@ -19,7 +18,7 @@ _C.TRAIN.SAVE_FREQ = 300
 _C.TRAIN.TTL_ITE = 5000
 
 _C.TRAIN.BATCH_SIZE = 32
-_C.TRAIN.LR = 1e-4
+_C.TRAIN.LR = 4e-4
 
 _C.TRAIN.OUTPUT_ROOT = 'OUTPUT'
 _C.TRAIN.OUTPUT_DIR = ''
@@ -29,7 +28,7 @@ _C.TRAIN.OUTPUT_RESFILE = 'log.txt'
 
 # ========== optim ==========
 _C.OPTIM = CN()
-_C.OPTIM.WEIGHT_DECAY = 1e-4
+_C.OPTIM.WEIGHT_DECAY = 5E-4
 _C.OPTIM.MOMENTUM = 0.9
 
 # ========== models ==========
@@ -43,21 +42,13 @@ _C.MODEL.D_HIDDEN_SIZE = 1024
 
 # ========== datasets ==========
 _C.DATASET = CN()
-_C.DATASET.NUM_CLASSES = 4
-_C.DATASET.NAME = 'PHM'
-_C.DATASET.SOURCE = r'Learning_set\Bearing1_1'
-_C.DATASET.TARGET = r'Learning_set\Bearing2_1'
-_C.DATASET.ROOT = r'E:\Raven\PHM处理后'  
+_C.DATASET.NUM_CLASSES = 9
+_C.DATASET.NAME = 'DDS'
+_C.DATASET.SOURCE = '20R_0HP'
+_C.DATASET.TARGET = '20R_8HP'
+_C.DATASET.ROOT = r'YOUR PATH'  
 _C.DATASET.SHUFFLE = True
-_C.DATASET.TEST_SHUFFLE = False
-_C.DATASET.TEST_SIZE_SOURCE = 0.1
-_C.DATASET.TEST_SIZE_TRAGET = 0.1
-
-
-# ========== target ==========
-_C.TARGET = CN()
-_C.TARGET.START_POINT = 17
-_C.TARGET.NUM_BATCHES = 20    # 32*20+77=717 < 911
+_C.DATASET.TEST_SIZE = 0.1
 
 # ========== method ==========
 _C.METHOD = CN()
@@ -77,7 +68,7 @@ def get_default_and_update_cfg(args):
 
     # ====Datasets====
     if args.data_root:
-        cfg.DATASET_ROOT = args.data_root
+        cfg.DATASET.ROOT = args.data_root
     if args.num_classes != 4:
         cfg.DATASET.NUM_CLASSES = args.num_classes
     if args.source:

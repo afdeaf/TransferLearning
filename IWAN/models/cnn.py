@@ -1,7 +1,6 @@
 import torch
 from models.base_model import BaseModel
 from torch import nn
-from .discriminator import *
 
 __all__ = ['cnn']
 
@@ -10,37 +9,27 @@ class CNN(BaseModel):
         super().__init__(num_classes, **kwargs)
 
         self.feature_extractor = nn.Sequential(
-            nn.Conv1d(1, 8, 7),     # 输出长度为2554
-            nn.BatchNorm1d(8),
+            nn.Conv2d(1, 16, 7),    # 输出为58*58
+            nn.BatchNorm2d(16),
             nn.ReLU(),
-            nn.MaxPool1d(2, 2),     # 输出长度为 1277
-            nn.Dropout(0.3),
+            nn.MaxPool2d(2, 2),     # 输出为29*29
+            nn.Dropout2d(0.3),
 
-            nn.Conv1d(8, 16, 5),    # 输出长度为 1273
-            nn.BatchNorm1d(16),
+            nn.Conv2d(16, 32, 5),   # 输出为25*25
+            nn.BatchNorm2d(32),
             nn.ReLU(),
-            nn.MaxPool1d(2, 2),     # 输出长度为 636
-            nn.Dropout(0.3),
+            nn.MaxPool2d(2, 2),     # 输出为12*12
+            nn.Dropout2d(0.3),
 
-            nn.Conv1d(16, 32, 5),   # 输出长度为 632
-            nn.BatchNorm1d(32),
+            nn.Conv2d(32, 64, 3),   # 输出为10*10
+            nn.BatchNorm2d(64),
             nn.ReLU(),
-            nn.MaxPool1d(2, 2),     # 输出长度为 316
-            nn.Dropout(0.3),
-
-            nn.Conv1d(32, 64, 5),   # 输出长度为 312
-            nn.BatchNorm1d(64),
-            nn.ReLU(),
-            nn.MaxPool1d(2, 2),     # 输出长度为 156, 156*64 = 9984, Linear的输入，_fdim
-            nn.Dropout(0.2),
-
-            nn.GRU(156, 20, 15),     # (输入维度，输出维度，使用隐藏层数量) 128 * 64 = 8192
-            # nn.GRU(128, 64, 128)   # 64*64=4096
-        ) 
+            nn.MaxPool2d(2, 2),     # 输出为5*5, 5*5*64 = 1600, Linear的输入，_fdim
+            nn.Dropout2d(0.2),
+        )
         self._init_params()
-        self._fdim = 20 * 64
+        self._fdim = 1600
         # self.build_head()
-
 
     def _init_params(self):
         for layer in self.modules():
@@ -57,7 +46,6 @@ class CNN(BaseModel):
                     nn.init.zeros_(layer.bias)
             
     def get_backbone_parameters(self) -> list:
-        # only cnn param
         feature_layers_params = []
         for m in self.feature_extractor:
             feature_layers_params += list(m.parameters())
@@ -66,11 +54,9 @@ class CNN(BaseModel):
         return parameter_list
 
     def forward_backbone(self, x):
-        # assert domain == 'source' or domain == 'target', f'domain \'{domain}\' not found!'
         feature = self.feature_extractor(x)
-        feature = torch.flatten(feature[0], 1)
+        feature = torch.flatten(feature, 1)
         return feature
-
 
 def cnn(num_classes: int=4, **kwargs):
     model = CNN(num_classes=num_classes, **kwargs)

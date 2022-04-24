@@ -1,6 +1,5 @@
 from torch import nn
 from utils.torch_utils import grl_hook
-from utils.torch_utils import ReverseLayerF as grl
 
 
 __all__ = ['Discriminator', 'Sift']
@@ -35,7 +34,7 @@ class Discriminator(nn.Module):
         return [{'params': self.parameters(), 'lr_mult':10}]
 
     def forward(self, x, coeff: float):
-        x = grl.apply(x, coeff)  # GRL
+        x.register_hook(grl_hook(coeff))  # GRL
         x = self.layer1(x)
         x = self.relu1(x)
         x = self.drop1(x)
@@ -47,6 +46,7 @@ class Discriminator(nn.Module):
         y = self.layer3(x)
 
         return y
+
 
 class Sift(nn.Module):
     def __init__(self, in_feature: int, hidden_size: int, out_feature: int = 1):

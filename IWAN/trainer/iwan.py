@@ -66,6 +66,7 @@ class IWAN(BaseTrainer):
         d_output_target = self.d_net(feature_target.detach())
         w = nn.Sigmoid()(d_output_source).detach().clone()
         self.w = 1 - w
+        self.w = torch.softmax(self.w, dim=0)
 
         # weight for source feature
         w_feature_source = self.w * feature_source

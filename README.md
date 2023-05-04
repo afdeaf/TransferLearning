@@ -1,8 +1,6 @@
 Modified from <a href="https://github.com/microsoft/UDA">microsoft/UDA </a>. <br>
 
 
-Some transfer learning and partial transfer learning algorithms were implemented using PyTorch. There are 5 algorithms including ERM, CORAL, DAN (MMD), DANN, and IWAN (partial transfer learning) in total. Note that the author mainly researched fault diagnosis, so the default dataset is the DDS dataset constructed by ourselves. If you want to use your dataset, please refer to the file in dds.py under the datasets folder.
-
 <h2>Introduction</h2>
 Some transfer learning and partial transfer learning algorithms were implemented using PyTorch. There are 5 algorithms including ERM, CORAL, DAN (MMD), DANN, and IWAN (partial transfer learning) in total. Note that the author mainly researched fault diagnosis, so the default dataset is the DDS dataset constructed by ourselves. See more information in the next section.
 

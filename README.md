@@ -13,7 +13,7 @@ You should split your data into a train/test set as follows:<br>
 &emsp;&emsp;├─y_train.pt<br>
 &emsp;&emsp;├─x_test.pt<br>
 &emsp;&emsp;└─y_test.pt<br>
-Then write the data loader file refering to the file in <font color='green'> dds.py</font> under <font color='green'> datasets</font> folder. <br>
+Then write the data loader file refering to the file in <font color="green"> dds.py</font> under <font color='green'> datasets</font> folder. <br>
 The file <font color='green'> task.py</font> under the folder <font color='green'> tasks</font> are set to generate transfer tasks, and our DDS dataset consists of 9 kinds of operation condition:
 <table>
     <tr>

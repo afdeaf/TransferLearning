@@ -6,6 +6,7 @@ Some transfer learning and partial transfer learning algorithms were implemented
 
 <h2>Usage</h2>
 You can directly modify the params in the function <font color='green'> parse_args</font> in <font color='green'> main.py</font>, then run main.py.
+You can also run main.py in terminal like: python main.py -- num-classes=5 --src='20R-0HP'.
 
 <h2>Using your own dataset</h2>
 You should split your data into a train/test set as follows:<br>

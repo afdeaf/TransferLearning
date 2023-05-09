@@ -36,7 +36,7 @@ class DANNTrainer(BaseTrainer):
         inputs_src, labels_src = data_src[0].to(self.device), data_src[1].to(self.device)
         inputs_tar, labels_tar = data_tar[0].to(self.device), data_tar[1].to(self.device)
 
-        f_src, y = self.base_net(inputs_src)    # x1, x2, x3, f, y
+        f_src, y = self.base_net(inputs_src)    # f, y
         f_tar, y_tar = self.base_net(inputs_tar)
 
         features_all = torch.cat((f_src, f_tar), dim=0)

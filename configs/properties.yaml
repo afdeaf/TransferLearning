@@ -1,0 +1,45 @@
+SEED: 77
+TRAINER: "CORALTrainer"
+
+# MMDTrainer DANNTrainer CORALTrainer CNNTrainer
+
+TRAIN:
+  TEST_FREQ: 100
+  PRINT_FREQ: 100
+  SAVE_FREQ: 300
+  TTL_ITE: 3000
+  BATCH_SIZE: 64
+  LR: 0.001
+  OUTPUT_ROOT: "TEMP"
+  OUTPUT_DIR: ""
+  OUTPUT_LOG: "log"
+  OUTPUT_CKPT: "ckpt"
+  OUTPUT_RESFILE: "log.txt"
+  OUTPUT_TB: "tensorborad"
+  DEVICE: "gpu"
+
+OPTIM:
+  WEIGHT_DECAY: 0.0005
+  MOMENTUM: 0.9
+
+MODEL:
+  PRETRAIN: false
+  BASENET: "cnn"
+  DNET: "Discriminator"
+  D_IN_DIM: 0
+  D_OUT_DIM: 1
+  D_HIDDEN_SIZE: 1024
+
+DATASET:
+  NUM_CLASSES: 9
+  NAME: "DDS"
+  SOURCE: "20R_4HP"
+  TARGET: "30R_8HP"
+  ROOT: ""
+  SHUFFLE: true
+
+METHOD:
+  W_ALG: 1
+  ENT: false
+
+SHUTDOWN: false

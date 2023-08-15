@@ -97,7 +97,7 @@ class BaseTrainer(object):
         else:
             logging.info('--> training from scratch')
 
-    def train(self):
+    def train(self) -> float:
         # start training
         for _, v in self.registed_models.items():
             v.train()
